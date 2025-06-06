@@ -23,7 +23,7 @@ public:
 		mBreakSystem = breakSystem;
 	}
 
-	void setStreeringSystem(int streeringSystem)
+	void setSteeringSystem(int streeringSystem)
 	{
 		mSteeringSystem = streeringSystem;
 	}
@@ -54,11 +54,10 @@ public:
 		return false;
 	}
 
-	virtual bool checkRestrict(void)
-	{
-		printf("Car::checkRestrict\n");
+	virtual bool checkRestrict(void) {
 		return true;
 	}
+
 };
 
 class Sedan : public Car //부모 클래스 상속받음
@@ -68,7 +67,6 @@ public:
 		printf("Sedan\n");
 		mType = SEDAN;
 	}
-	~Sedan() {}
 
 	virtual bool checkRestrict(void) {
 		printf("Sedan::checkRestrict\n");
@@ -87,7 +85,6 @@ public:
 		printf("SUV\n");
 		mType = SUV_TYPE;
 	}
-	~SUV() {}
 
 	virtual bool checkRestrict(void) {
 		printf("SUV::checkRestrict\n");
@@ -107,7 +104,6 @@ public:
 		printf("Truck\n");
 		mType = TRUCK;
 	}
-	~Truck() {}
 
 	virtual bool checkRestrict(void) {
 		printf("Truck::checkRestrict\n");

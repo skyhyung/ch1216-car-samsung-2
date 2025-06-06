@@ -93,52 +93,52 @@ bool isValidAnswer(int step, int answer)
     return true;
 }
 
-void runProducedCar(Car& car)
+void runProducedCar(Car* car)
 {
-    if (car.checkRestrict() == false)
+    if (car->checkRestrict() == false)
     {
         printf("자동차가 동작되지 않습니다\n");
         return;
     }
 
-    if (car.isEngineBroken() == true)
+    if (car->isEngineBroken() == true)
     {
         printf("엔진이 고장나있습니다.\n");
         printf("자동차가 움직이지 않습니다.\n");
         return;
     }
 
-    if (car.getType() == SEDAN)
+    if (car->getType() == SEDAN)
         printf("Car Type : Sedan\n");
-    if (car.getType() == SUV_TYPE)
+    if (car->getType() == SUV_TYPE)
         printf("Car Type : SUV\n");
-    if (car.getType() == TRUCK)
+    if (car->getType() == TRUCK)
         printf("Car Type : Truck\n");
-    if (car.getEngine() == GM)
+    if (car->getEngine() == GM)
         printf("Engine : GM\n");
-    if (car.getEngine() == TOYOTA)
+    if (car->getEngine() == TOYOTA)
         printf("Engine : TOYOTA\n");
-    if (car.getEngine() == WIA)
+    if (car->getEngine() == WIA)
         printf("Engine : WIA\n");
-    if (car.getBreakSystem() == MANDO)
+    if (car->getBreakSystem() == MANDO)
         printf("Brake System : Mando\n");
-    if (car.getBreakSystem() == CONTINENTAL)
+    if (car->getBreakSystem() == CONTINENTAL)
         printf("Brake System : Continental\n");
-    if (car.getBreakSystem() == BOSCH_B)
+    if (car->getBreakSystem() == BOSCH_B)
         printf("Brake System : Bosch\n");
-    if (car.getSteeringSystem() == BOSCH_S)
+    if (car->getSteeringSystem() == BOSCH_S)
         printf("SteeringSystem : Bosch\n");
-    if (car.getSteeringSystem() == MOBIS)
+    if (car->getSteeringSystem() == MOBIS)
         printf("SteeringSystem : Mobis\n");
 
     printf("자동차가 동작됩니다.\n");
 }
 
-void handleStep(Car& car, int& step, int answer)
+void handleStep(Car* car, int& step, int answer)
 {
     if (step == Engine_Q)
     {
-        car.setEngine(answer);
+        car->setEngine(answer);
         printf("차량 엔진으로 %d을 선택하셨습니다.\n", answer);
         delay(800);
         step = brakeSystem_Q;
@@ -146,13 +146,13 @@ void handleStep(Car& car, int& step, int answer)
     else if (step == brakeSystem_Q)
     {
         printf("차량 브레이크 시스템으로 %d을 선택하셨습니다.\n", answer);
-        car.setBreakSystem(answer);
+        car->setBreakSystem(answer);
         delay(800);
         step = SteeringSystem_Q;
     }
     else if (step == SteeringSystem_Q)
     {
-        car.setStreeringSystem(answer);
+        car->setStreeringSystem(answer);
         printf("차량 스티어링 시스템으로 %d을 선택하셨습니다.\n", answer);
         delay(800);
         step = Run_Test;
@@ -166,9 +166,9 @@ void handleStep(Car& car, int& step, int answer)
     {
         printf("Test...\n");
         delay(1500);
-        if (car.checkRestrict() == false) {
+        if (car->checkRestrict() == false) {
             printf("자동차 부품 조합 테스트 결과 : FAIL\n");
-            printf("CarType_Q: %d, Engine_Q: %d, brakeSystem_Q: %d, SteeringSystem_Q: %d", car.getType(), car.getEngine(), car.getBreakSystem(), car.getSteeringSystem());
+            printf("CarType_Q: %d, Engine_Q: %d, brakeSystem_Q: %d, SteeringSystem_Q: %d", car->getType(), car->getEngine(), car->getBreakSystem(), car->getSteeringSystem());
         }
         else {
             printf("자동차 부품 조합 테스트 결과 : PASS\n");
@@ -180,7 +180,7 @@ void handleStep(Car& car, int& step, int answer)
 
 int main()
 {
-    Car car;
+    std::unique_ptr<Car> car;
     char buf[100];
     int step = CarType_Q;
 
@@ -270,11 +270,11 @@ int main()
 
         if (step == CarType_Q) {
             if (answer == SEDAN)
-                car = Sedan();
+                car = std::make_unique<Sedan>();
             else if (answer == SUV_TYPE)
-                car = SUV();
+                car = std::make_unique<SUV>();
             else if (answer == TRUCK)
-                car = Truck();
+                car = std::make_unique<Truck>();
 
             printf("차량 타입으로 %d을 선택하셨습니다.\n", answer);
             delay(1000);
@@ -282,7 +282,7 @@ int main()
             continue;
         }
 
-        handleStep(car, step, answer);
+        handleStep(car.get(), step, answer);
     }
 }
 
