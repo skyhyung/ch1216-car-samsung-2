@@ -349,7 +349,7 @@ bool isValidCheck(struct car& car)
         return false;
     if (car.type == TRUCK && car.breakSystem == MANDO)
         return false;
-    if (car.type == BOSCH_B && car.steeringSystem != BOSCH_S)
+    if (car.breakSystem == BOSCH_B && car.steeringSystem != BOSCH_S)
         return false;
 
     return true;
