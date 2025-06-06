@@ -2,16 +2,11 @@
 
 class Car
 {
-private:
-
 public:
 	int mType = CAR_TYPE_MIN;
 	int mEngine = ENGINE_MIN;
 	int mBreakSystem = BREAK_MIN;
 	int mSteeringSystem = STREERING_MIN;
-
-	Car() {}
-	~Car() {}
 
 	void setEngine(int engine)
 	{
@@ -54,10 +49,8 @@ public:
 		return false;
 	}
 
-	virtual bool checkRestrict(void) {
-		return true;
-	}
-
+	virtual bool checkRestrict() = 0;
+	virtual ~Car() = default;
 };
 
 class Sedan : public Car //부모 클래스 상속받음
@@ -68,7 +61,7 @@ public:
 		mType = SEDAN;
 	}
 
-	virtual bool checkRestrict(void) {
+	bool checkRestrict(void) override {
 		printf("Sedan::checkRestrict\n");
 		if (mBreakSystem == BOSCH_B && mSteeringSystem != BOSCH_S)
 			return false;
@@ -86,7 +79,7 @@ public:
 		mType = SUV_TYPE;
 	}
 
-	virtual bool checkRestrict(void) {
+	bool checkRestrict(void) override {
 		printf("SUV::checkRestrict\n");
 		if (mBreakSystem == BOSCH_B && mSteeringSystem != BOSCH_S)
 			return false;
@@ -105,7 +98,7 @@ public:
 		mType = TRUCK;
 	}
 
-	virtual bool checkRestrict(void) {
+	bool checkRestrict(void) override {
 		printf("Truck::checkRestrict\n");
 		if (mBreakSystem == BOSCH_B && mSteeringSystem != BOSCH_S)
 			return false;
@@ -113,5 +106,32 @@ public:
 			return false;
 
 		return true;
+	}
+};
+
+class Creator {
+public:
+	virtual std::unique_ptr<Car> factoryMethod() = 0;
+	virtual ~Creator() = default;
+};
+
+class SedanCreator : public Creator {
+public:
+	std::unique_ptr<Car> factoryMethod() override {
+		return std::make_unique<Sedan>();
+	}
+};
+
+class SUVCreator : public Creator {
+public:
+	std::unique_ptr<Car> factoryMethod() override {
+		return std::make_unique<SUV>();
+	}
+};
+
+class TruckCreator : public Creator {
+public:
+	std::unique_ptr<Car> factoryMethod() override {
+		return std::make_unique<Truck>();
 	}
 };

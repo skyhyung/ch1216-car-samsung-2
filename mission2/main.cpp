@@ -152,7 +152,7 @@ void handleStep(Car* car, int& step, int answer)
     }
     else if (step == SteeringSystem_Q)
     {
-        car->setStreeringSystem(answer);
+        car->setSteeringSystem(answer);
         printf("차량 스티어링 시스템으로 %d을 선택하셨습니다.\n", answer);
         delay(800);
         step = Run_Test;
@@ -180,6 +180,7 @@ void handleStep(Car* car, int& step, int answer)
 
 int main()
 {
+    std::unique_ptr<Creator> creator;
     std::unique_ptr<Car> car;
     char buf[100];
     int step = CarType_Q;
@@ -253,34 +254,35 @@ int main()
             break;
         }
 
-        // 숫자로 된 대답인지 확인
-        char* checkNumber;
-        int answer = strtol(buf, &checkNumber, 10); // 문자열을 10진수로 변환
+		// 숫자로 된 대답인지 확인
+		char* checkNumber;
+		int answer = strtol(buf, &checkNumber, 10); // 문자열을 10진수로 변환
 
-        // 입력받은 문자가 숫자가 아니라면
-        if (isValidNumber(checkNumber) == false)
-            continue;
+		// 입력받은 문자가 숫자가 아니라면
+		if (isValidNumber(checkNumber) == false)
+			continue;
 
-        if (isValidAnswer(step, answer) == false)
-            continue;
+		if (isValidAnswer(step, answer) == false)
+			continue;
 
-        // 이전 or 이전으로 돌아가기
-        if (isGoBack(step, answer) == false)
-            continue;
+		// 이전 or 이전으로 돌아가기
+		if (isGoBack(step, answer) == false)
+			continue;
 
-        if (step == CarType_Q) {
-            if (answer == SEDAN)
-                car = std::make_unique<Sedan>();
-            else if (answer == SUV_TYPE)
-                car = std::make_unique<SUV>();
-            else if (answer == TRUCK)
-                car = std::make_unique<Truck>();
+		if (step == CarType_Q) {
+			if (answer == SEDAN)
+                creator = std::make_unique<SedanCreator>();	
+			else if (answer == SUV_TYPE)
+				creator = std::make_unique<SUVCreator>();
+			else if (answer == TRUCK)
+				creator = std::make_unique<TruckCreator>();
 
-            printf("차량 타입으로 %d을 선택하셨습니다.\n", answer);
-            delay(1000);
-            step = Engine_Q;
-            continue;
-        }
+            car = creator->factoryMethod();
+			printf("차량 타입으로 %d을 선택하셨습니다.\n", answer);
+			delay(1000);
+			step = Engine_Q;
+			continue;
+		}
 
         handleStep(car.get(), step, answer);
     }

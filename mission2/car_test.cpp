@@ -2,17 +2,8 @@
 #include "car.cpp"
 
 TEST(Group, TC1) {
-	std::unique_ptr<Car> car;
-
-	car = std::make_unique<Car>();
-
-	EXPECT_TRUE(car->checkRestrict());
-}
-
-TEST(Group, TC2) {
-	std::unique_ptr<Car> car;
-
-	car = std::make_unique<Sedan>();
+	std::unique_ptr<Creator> creator = std::make_unique<SedanCreator>();
+	std::unique_ptr<Car> car = creator->factoryMethod();
 
 	EXPECT_EQ(car->getType(), SEDAN);
 
@@ -41,10 +32,9 @@ TEST(Group, TC2) {
 	EXPECT_TRUE(car->checkRestrict());
 }
 
-TEST(Group, TC3) {
-	std::unique_ptr<Car> car;
-
-	car = std::make_unique<SUV>();
+TEST(Group, TC2) {
+	std::unique_ptr<Creator> creator = std::make_unique<SUVCreator>();
+	std::unique_ptr<Car> car = creator->factoryMethod();
 
 	EXPECT_EQ(car->getType(), SUV_TYPE);
 
@@ -69,10 +59,9 @@ TEST(Group, TC3) {
 	EXPECT_FALSE(car->checkRestrict());
 }
 
-TEST(Group, TC4) {
-	std::unique_ptr<Car> car;
-
-	car = std::make_unique<Truck>();
+TEST(Group, TC3) {
+	std::unique_ptr<Creator> creator = std::make_unique<TruckCreator>();
+	std::unique_ptr<Car> car = creator->factoryMethod();
 
 	EXPECT_EQ(car->getType(), TRUCK);
 
