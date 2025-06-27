@@ -3,7 +3,7 @@
 ![coverage2](./coverage_main.jpg)
 ![coverage](./coverage.jpg)
 
-|요구사항 체크리스트|
+|요구사항 |체크리스트|
 |---------|--------|
 |   D1    |     O  |
 |   D2    |    O   |
