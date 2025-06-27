@@ -1,3 +1,7 @@
+##CRA
+
+![coverage](./coverage.jpg)
+![coverage2](./coverage_main.jpg)
 
 |요구사항 체크리스트|
 |------|------|
